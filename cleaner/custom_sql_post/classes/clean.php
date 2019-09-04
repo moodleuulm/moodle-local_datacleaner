@@ -15,22 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
- *
- * @package    cleaner_environment_matrix
- * @author     Nicholas Hoobin <nicholashoobin@catalyst-au.net>
- * @copyright  2017 Catalyst IT
+ * @package    cleaner_custom_sql_post
+ * @copyright  2019 Catalyst IT
+ * @author     Srdjan Janković <srdjan@catalyst.net.nz>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace cleaner_custom_sql_post;
 
-if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
+defined('MOODLE_INTERNAL') || die();
+
+class clean extends \local_datacleaner\clean {
+    const TASK = 'Custom SQL query in post phase';
+
+    /**
+     * Execute custom tasks
+     */
+    static public function execute() {
+        global $DB;
+
+        $dryrun = (bool)self::$options['dryrun'];
+        $verbose = (bool)self::$options['verbose'];
+
+        $config = get_config('cleaner_custom_sql_post');
+
+        if (isset($config->sql)) {
+            self::execute_sql($config->sql);
+        }
+    }
 }
-
-$plugin->version   = 2019082700;
-$plugin->release   = 2019082700;
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->requires  = 2013111800; // Moodle 2.6 release and upwards.
-$plugin->component = 'cleaner_environment_matrix';
-$plugin->sortorder = 200;

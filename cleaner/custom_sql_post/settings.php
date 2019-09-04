@@ -15,22 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
- *
- * @package    cleaner_environment_matrix
- * @author     Nicholas Hoobin <nicholashoobin@catalyst-au.net>
- * @copyright  2017 Catalyst IT
+ * @package    cleaner_custom_sql_post
+ * @copyright  2019 Catalyst IT
+ * @author     Srdjan Janković <srdjan@catalyst.net.nz>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
 
-if (!defined('MOODLE_INTERNAL')) {
-    die('Direct access to this script is forbidden.'); // It must be included from a Moodle page.
+if (!$ADMIN->fulltree) {
+    return;
 }
 
-$plugin->version   = 2019082700;
-$plugin->release   = 2019082700;
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->requires  = 2013111800; // Moodle 2.6 release and upwards.
-$plugin->component = 'cleaner_environment_matrix';
-$plugin->sortorder = 200;
+$settings->add(new admin_setting_configtextarea('cleaner_custom_sql_post/sql',
+            new lang_string('sql', 'cleaner_custom_sql_post'),
+            new lang_string('sqldesc', 'cleaner_custom_sql_post'), null, PARAM_RAW));
